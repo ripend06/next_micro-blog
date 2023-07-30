@@ -5,10 +5,35 @@ import styles from "@/styles/Home.module.css"
 import Link from 'next/link'
 import Layout from '@/components/Layout'
 import utilStyle from "../styles/utils.module.css"
+import { getPostsData }  from "../lib/post";
+
+//SSGの場合
+export async function getStaticProps() {
+  const allPostsData = getPostsData(); //id, title, date, thumbnail
+  console.log(allPostsData);
+
+  return {
+    props: {
+      allPostsData,
+    },
+  };
+}
+
+
+//SSRの場合
+// export async function getServerSideProps(context) {
+//   return {
+//     props: {
+//       //コンポーネントにわたすためのprops
+//     },
+//   };
+// }
+
+
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function Home({ allPostsData }) {
   return (
     <>
       <Layout>
@@ -21,70 +46,25 @@ export default function Home() {
         <section>
           <h2 className={utilStyle.textCenter}>エンジニアのブログ📝</h2>
           <div className={styles.grid}>
-            <article className={utilStyle.textCenter}>
-              <Link href="/">
-                <img src="images/thumbnail01.jpg" alt=""
-                  className={styles.thumbnailImage}
-                />
-              </Link>
-              <Link href="/" legacyBehavior>
-                <a className={utilStyle.boldText}>
-                  記事のタイトルです１。
-                </a>
-              </Link>
-              <br />
-              <small classNmae={utilStyle.lightText}>
-                Debrually 23, 2023
-              </small>
-            </article>
-            <article className={utilStyle.textCenter}>
-              <Link href="/">
-                <img src="images/thumbnail01.jpg" alt=""
-                  className={styles.thumbnailImage}
-                />
-              </Link>
-              <Link href="/" legacyBehavior>
-                <a className={utilStyle.boldText}>
-                  記事のタイトルです１。
-                </a>
-              </Link>
-              <br />
-              <small classNmae={utilStyle.lightText}>
-                Debrually 23, 2023
-              </small>
-            </article>
-            <article className={utilStyle.textCenter}>
-              <Link href="/">
-                <img src="images/thumbnail01.jpg" alt=""
-                  className={styles.thumbnailImage}
-                />
-              </Link>
-              <Link href="/" legacyBehavior>
-                <a className={utilStyle.boldText}>
-                  記事のタイトルです１。
-                </a>
-              </Link>
-              <br />
-              <small classNmae={utilStyle.lightText}>
-                Debrually 23, 2023
-              </small>
-            </article>
-            <article className={utilStyle.textCenter}>
-              <Link href="/">
-                <img src="images/thumbnail01.jpg" alt=""
-                  className={styles.thumbnailImage}
-                />
-              </Link>
-              <Link href="/" legacyBehavior>
-                <a className={utilStyle.boldText}>
-                  記事のタイトルです１。
-                </a>
-              </Link>
-              <br />
-              <small classNmae={utilStyle.lightText}>
-                Debrually 23, 2023
-              </small>
-            </article>
+            {allPostsData.map(({ id, title, date, thumbnail }) => (
+              <article keyy={id} className={utilStyle.textCenter}>
+                <Link href={`/posts/${id}`}>
+                  <img src={`${thumbnail}`} alt=""
+                    className={styles.thumbnailImage}
+                  />
+                </Link>
+                <Link href={`/posts/${id}`} legacyBehavior>
+                  <a className={utilStyle.boldText}>
+                    {title}
+                  </a>
+                </Link>
+                <br />
+                <small className={utilStyle.lightText}>
+                  {date}
+                </small>
+              </article>
+            ))}
+
           </div>
         </section>
 
