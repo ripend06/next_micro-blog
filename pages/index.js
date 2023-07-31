@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from "@/styles/Home.module.css"
 import Link from 'next/link'
-import Layout from '@/components/Layout'
+import Layout, { siteTitle } from '@/components/Layout'
 import utilStyle from "../styles/utils.module.css"
 import { getPostsData }  from "../lib/post";
 
@@ -36,7 +36,10 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home({ allPostsData }) {
   return (
     <>
-      <Layout>
+      <Layout home>
+        <Head>
+          <title>{siteTitle}</title>
+        </Head>
         <section className={`${utilStyle.headingMd} ${utilStyle.padding1px}`}>
           <p>
             私はフロントエンドエンジニアとして活動してます。好きな言語は、javascriptです
